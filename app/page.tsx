@@ -746,7 +746,7 @@ export default function PlannerCRMApp() {
       case "dashboard":
         return (
           <PlannerDashboard
-            clients={clients} // Pass clients prop here
+            // clients={clients} // Pass clients prop here
             onNavigateToClients={() => setCurrentCRMModule("clients")}
             onNavigateToClient={handleClientSelection}
             onNavigateToAppointments={() => setCurrentCRMModule("appointments")}

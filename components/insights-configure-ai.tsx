@@ -624,8 +624,8 @@ const PromptConfigPage: React.FC = () => {
               <CardContent className="space-y-6">
                 <Tabs defaultValue="default" className="space-y-4">
                   <TabsList>
-                    <TabsTrigger value="default">Default</TabsTrigger>
-                    <TabsTrigger value="custom">Custom</TabsTrigger>
+                    <TabsTrigger value="default">Default Prompt</TabsTrigger>
+                    <TabsTrigger value="custom">Custom Prompt</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="default" className="space-y-4">

@@ -1,11 +1,11 @@
 // components/planner-dashboard.tsx
 "use client";
 
-import { Client } from "@/components/client-add-modal"; // Import the Client interface
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { usePlannerDashboardData } from "@/hooks/use-planner-dashboard-data";
 import { isThisMonth, parseISO } from "date-fns"; // Import date-fns for date logic
 import {
   AlertTriangle,
@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 
 interface PlannerDashboardProps {
-  clients: Client[]; // <-- ADDED: Prop to receive the clients data
+  // clients: Client[]; // <-- ADDED: Prop to receive the clients data
   onNavigateToClients?: () => void;
   onNavigateToClient?: (clientId: string) => void;
   onNavigateToAppointments?: () => void;
@@ -28,12 +28,21 @@ interface PlannerDashboardProps {
 }
 
 export function PlannerDashboard({
-  clients, // <-- Receive the clients prop
+  // clients, // <-- Receive the clients prop
   onNavigateToClients,
   onNavigateToClient,
   onNavigateToAppointments,
   onNavigateToTasks,
 }: PlannerDashboardProps) {
+  const { loading, error, clients, metrics } = usePlannerDashboardData();
+  if (loading)
+    return (
+      <div className="p-6 text-sm text-muted-foreground">
+        Loading dashboard…
+      </div>
+    );
+  if (error)
+    return <div className="p-6 text-sm text-red-600">Error: {error}</div>;
   // Calculate metrics dynamically based on the 'clients' prop
   const totalAUM = clients.reduce(
     (sum, client) => sum + client.portfolioValue,

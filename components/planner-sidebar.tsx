@@ -3,14 +3,12 @@
 import {
   Calendar,
   CheckSquare,
-  ClipboardList,
   FileText,
   HelpCircle,
   LayoutDashboard,
   PanelLeftClose,
   PanelLeftOpen,
   Settings,
-  Target,
   TrendingUp,
   User,
   UserPlus,
@@ -100,17 +98,17 @@ const reportingAndPlanningItems: SidebarNavItem[] = [
     url: "/analytics",
     icon: TrendingUp,
   },
-  {
-    title: "Goal Tracking",
-    url: "/goal-tracking",
-    icon: Target,
-  },
-  {
-    title: "Reviews",
-    url: "/reviews",
-    icon: ClipboardList,
-    // hidden: true, // Example: uncomment to hide this item
-  },
+  // {
+  //   title: "Goal Tracking",
+  //   url: "/goal-tracking",
+  //   icon: Target,
+  // },
+  // {
+  //   title: "Reviews",
+  //   url: "/reviews",
+  //   icon: ClipboardList,
+  //   // hidden: true, // Example: uncomment to hide this item
+  // },
 ];
 
 const sidebarSections: SidebarNavGroup[] = [
