@@ -1231,84 +1231,84 @@ export function ClientAddModal({
                     </span>
                   )}
                 </TabsTrigger>
+              </TabsList>
 
-                {/* TabsContent for each tab: Takes remaining vertical space, scrollable content */}
-                <TabsContent
-                  value="personal-contact"
-                  className="p-4 space-y-4 flex-1 overflow-y-auto"
-                >
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="name">Full Name *</Label>
-                      <Input
-                        id="name"
-                        value={name}
-                        onChange={(e) => {
-                          setName(e.target.value);
-                          setErrors((prev) => ({ ...prev, name: "" }));
-                        }}
-                        placeholder="e.g. John Doe"
-                      />
-                      {errors.name && (
-                        <p className="text-red-500 text-sm">{errors.name}</p>
-                      )}
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Email *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => {
-                          setEmail(e.target.value);
-                          setErrors((prev) => ({ ...prev, email: "" }));
-                        }}
-                        placeholder="e.g. john.doe@example.com"
-                      />
-                      {errors.email && (
-                        <p className="text-red-500 text-sm">{errors.email}</p>
-                      )}
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="+60 12-345 6789"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="dateOfBirth">Date of Birth</Label>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant={"outline"}
-                            className={cn(
-                              "w-full justify-start text-left font-normal",
-                              !dateOfBirth && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {dateOfBirth ? (
-                              format(dateOfBirth, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={dateOfBirth}
-                            onSelect={setDateOfBirth}
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
+              {/* TabsContent for each tab: Takes remaining vertical space, scrollable content */}
+              <TabsContent
+                value="personal-contact"
+                className="p-4 space-y-4 flex-1 overflow-y-auto"
+              >
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="name">Full Name *</Label>
+                    <Input
+                      id="name"
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        setErrors((prev) => ({ ...prev, name: "" }));
+                      }}
+                      placeholder="e.g. John Doe"
+                    />
+                    {errors.name && (
+                      <p className="text-red-500 text-sm">{errors.name}</p>
+                    )}
                   </div>
-                </TabsContent>
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setErrors((prev) => ({ ...prev, email: "" }));
+                      }}
+                      placeholder="e.g. john.doe@example.com"
+                    />
+                    {errors.email && (
+                      <p className="text-red-500 text-sm">{errors.email}</p>
+                    )}
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="phone">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="+60 12-345 6789"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-full justify-start text-left font-normal",
+                            !dateOfBirth && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {dateOfBirth ? (
+                            format(dateOfBirth, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={dateOfBirth}
+                          onSelect={setDateOfBirth}
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                </div>
                 <div className="grid gap-2">
                   <Label htmlFor="address">Address</Label>
                   <Textarea
@@ -1346,7 +1346,7 @@ export function ClientAddModal({
                     ))}
                   </div>
                 </div>
-              </TabsList>
+              </TabsContent>
 
               {/* Financial & Service Details Tab */}
               <TabsContent

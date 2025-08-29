@@ -66,6 +66,7 @@ import AmendOutputPage from "@/components/insights-amend-pdf";
 import PromptConfigPage from "@/components/insights-configure-ai";
 import { PlannerSettings } from "@/components/planner-settings";
 import { Support } from "@/components/support";
+import { useClients } from "@/hooks/use-client";
 
 export default function PlannerCRMApp() {
   // CRM Level State
@@ -111,142 +112,146 @@ export default function PlannerCRMApp() {
 
   // Mock client data - THIS IS NOW THE SOURCE OF TRUTH FOR CLIENTS
   // This initial state populates the clients list. When a new client is added, this state is updated.
-  const [clients, setClients] = useState<Client[]>([
-    {
-      id: "client-1",
-      name: "John Doe",
-      email: "john.doe@email.com",
-      phone: "+60 12-345 6789",
-      portfolioValue: 450000,
-      monthlyReturn: 2.5,
-      lastContact: "2 days ago",
-      nextReview: "2024-02-15",
-      status: "active",
-      riskProfile: "Moderate",
-      joinDate: "2022-03-15",
-      totalGainLoss: 45000,
-      totalGainLossPercent: 11.1,
-      dateOfBirth: "1980-05-10",
-      address: "123 Main Street, Cityville",
-      financialGoals: "Retirement planning",
-      notes: "Very responsive, prefers email.",
-      investmentPreferences: [], // Added empty array for ESG check
-      sourceOfLead: "Referral from Jane Doe",
-      lifetimeRevenue: 15000, // Added lifetime revenue
-    },
-    {
-      id: "client-2",
-      name: "Sarah Lim",
-      email: "sarah.lim@email.com",
-      phone: "+60 12-987 6543",
-      portfolioValue: 280000,
-      monthlyReturn: -1.2,
-      lastContact: "1 week ago",
-      nextReview: "2024-01-30",
-      status: "needs-attention",
-      riskProfile: "Conservative",
-      joinDate: "2021-08-22",
-      totalGainLoss: -8000,
-      totalGainLossPercent: -2.8,
-      dateOfBirth: "1992-11-20",
-      address: "456 Oak Avenue, Townsville",
-      financialGoals: "Saving for a down payment",
-      notes: "Prefers phone calls, check in often.",
-      investmentPreferences: ["Income Generation"],
-      sourceOfLead: "Website signup",
-      lifetimeRevenue: 8000, // Added lifetime revenue
-    },
-    {
-      id: "client-3",
-      name: "Ahmad Rahman",
-      email: "ahmad.rahman@email.com",
-      phone: "+60 12-555 1234",
-      portfolioValue: 750000,
-      monthlyReturn: 3.8,
-      lastContact: "3 days ago",
-      nextReview: "2024-03-01",
-      status: "active",
-      riskProfile: "Aggressive",
-      joinDate: "2020-11-10",
-      totalGainLoss: 125000,
-      totalGainLossPercent: 20.0,
-      dateOfBirth: "1975-02-01",
-      address: "789 Pine Lane, Villageton",
-      financialGoals: "Maximize growth, risk-tolerant.",
-      notes: "High net worth, busy executive.",
-      investmentPreferences: ["High Growth"],
-      sourceOfLead: "Existing client referral",
-      lifetimeRevenue: 25000, // Added lifetime revenue
-    },
-    {
-      id: "client-4",
-      name: "Michelle Wong",
-      email: "michelle.wong@email.com",
-      phone: "+60 12-777 8888",
-      portfolioValue: 320000,
-      monthlyReturn: 1.8,
-      lastContact: "5 days ago",
-      nextReview: "2024-02-20",
-      status: "active",
-      riskProfile: "Moderate",
-      joinDate: "2023-01-05",
-      totalGainLoss: 28000,
-      totalGainLossPercent: 9.6,
-      dateOfBirth: "1988-07-25",
-      address: "101 Cedar Road, Hamletburg",
-      financialGoals: "Balanced growth and income",
-      notes: "New client, requires guidance.",
-      investmentPreferences: [],
-      sourceOfLead: "Marketing campaign",
-      lifetimeRevenue: 7000, // Added lifetime revenue
-    },
-    {
-      id: "client-5",
-      name: "David Tan",
-      email: "david.tan@email.com",
-      phone: "+60 12-999 0000",
-      portfolioValue: 180000,
-      monthlyReturn: 0.5,
-      lastContact: "2 weeks ago",
-      nextReview: "2024-01-25",
-      status: "inactive",
-      riskProfile: "Conservative",
-      joinDate: "2022-07-18",
-      totalGainLoss: 5000,
-      totalGainLossPercent: 2.9,
-      dateOfBirth: "1965-03-03",
-      address: "222 Birch Street, Countryside",
-      financialGoals: "Capital preservation",
-      notes: "Retiree, very risk averse.",
-      investmentPreferences: ["Income Generation"],
-      sourceOfLead: "Walk-in",
-      lifetimeRevenue: 4000, // Added lifetime revenue
-    },
-    // Adding a new client for testing the 'new_client_onboarding' opportunity
-    {
-      id: "client-6",
-      name: "New Client Test",
-      email: "new.client@email.com",
-      phone: "+60 12-111 2222",
-      portfolioValue: 5000, // Low portfolio value
-      monthlyReturn: 0,
-      lastContact: "Today",
-      nextReview: "2024-04-01",
-      status: "active",
-      riskProfile: "Moderate",
-      joinDate: new Date().toISOString().split("T")[0], // Today's date
-      totalGainLoss: 0,
-      totalGainLossPercent: 0,
-      dateOfBirth: "1995-01-01",
-      address: "100 New St, New City",
-      financialGoals: "General savings",
-      notes: "Brand new client, needs initial setup.",
-      investmentPreferences: [],
-      sourceOfLead: "Online ad",
-      lifetimeRevenue: 0, // New client, so 0 lifetime revenue
-    },
-  ]);
+  // HACK static data
+  // const [clients, setClients] = useState<Client[]>([
+  //   {
+  //     id: "client-1",
+  //     name: "John Doe",
+  //     email: "john.doe@email.com",
+  //     phone: "+60 12-345 6789",
+  //     portfolioValue: 450000,
+  //     monthlyReturn: 2.5,
+  //     lastContact: "2 days ago",
+  //     nextReview: "2024-02-15",
+  //     status: "active",
+  //     riskProfile: "Moderate",
+  //     joinDate: "2022-03-15",
+  //     totalGainLoss: 45000,
+  //     totalGainLossPercent: 11.1,
+  //     dateOfBirth: "1980-05-10",
+  //     address: "123 Main Street, Cityville",
+  //     financialGoals: "Retirement planning",
+  //     notes: "Very responsive, prefers email.",
+  //     investmentPreferences: [], // Added empty array for ESG check
+  //     sourceOfLead: "Referral from Jane Doe",
+  //     lifetimeRevenue: 15000, // Added lifetime revenue
+  //   },
+  //   {
+  //     id: "client-2",
+  //     name: "Sarah Lim",
+  //     email: "sarah.lim@email.com",
+  //     phone: "+60 12-987 6543",
+  //     portfolioValue: 280000,
+  //     monthlyReturn: -1.2,
+  //     lastContact: "1 week ago",
+  //     nextReview: "2024-01-30",
+  //     status: "needs-attention",
+  //     riskProfile: "Conservative",
+  //     joinDate: "2021-08-22",
+  //     totalGainLoss: -8000,
+  //     totalGainLossPercent: -2.8,
+  //     dateOfBirth: "1992-11-20",
+  //     address: "456 Oak Avenue, Townsville",
+  //     financialGoals: "Saving for a down payment",
+  //     notes: "Prefers phone calls, check in often.",
+  //     investmentPreferences: ["Income Generation"],
+  //     sourceOfLead: "Website signup",
+  //     lifetimeRevenue: 8000, // Added lifetime revenue
+  //   },
+  //   {
+  //     id: "client-3",
+  //     name: "Ahmad Rahman",
+  //     email: "ahmad.rahman@email.com",
+  //     phone: "+60 12-555 1234",
+  //     portfolioValue: 750000,
+  //     monthlyReturn: 3.8,
+  //     lastContact: "3 days ago",
+  //     nextReview: "2024-03-01",
+  //     status: "active",
+  //     riskProfile: "Aggressive",
+  //     joinDate: "2020-11-10",
+  //     totalGainLoss: 125000,
+  //     totalGainLossPercent: 20.0,
+  //     dateOfBirth: "1975-02-01",
+  //     address: "789 Pine Lane, Villageton",
+  //     financialGoals: "Maximize growth, risk-tolerant.",
+  //     notes: "High net worth, busy executive.",
+  //     investmentPreferences: ["High Growth"],
+  //     sourceOfLead: "Existing client referral",
+  //     lifetimeRevenue: 25000, // Added lifetime revenue
+  //   },
+  //   {
+  //     id: "client-4",
+  //     name: "Michelle Wong",
+  //     email: "michelle.wong@email.com",
+  //     phone: "+60 12-777 8888",
+  //     portfolioValue: 320000,
+  //     monthlyReturn: 1.8,
+  //     lastContact: "5 days ago",
+  //     nextReview: "2024-02-20",
+  //     status: "active",
+  //     riskProfile: "Moderate",
+  //     joinDate: "2023-01-05",
+  //     totalGainLoss: 28000,
+  //     totalGainLossPercent: 9.6,
+  //     dateOfBirth: "1988-07-25",
+  //     address: "101 Cedar Road, Hamletburg",
+  //     financialGoals: "Balanced growth and income",
+  //     notes: "New client, requires guidance.",
+  //     investmentPreferences: [],
+  //     sourceOfLead: "Marketing campaign",
+  //     lifetimeRevenue: 7000, // Added lifetime revenue
+  //   },
+  //   {
+  //     id: "client-5",
+  //     name: "David Tan",
+  //     email: "david.tan@email.com",
+  //     phone: "+60 12-999 0000",
+  //     portfolioValue: 180000,
+  //     monthlyReturn: 0.5,
+  //     lastContact: "2 weeks ago",
+  //     nextReview: "2024-01-25",
+  //     status: "inactive",
+  //     riskProfile: "Conservative",
+  //     joinDate: "2022-07-18",
+  //     totalGainLoss: 5000,
+  //     totalGainLossPercent: 2.9,
+  //     dateOfBirth: "1965-03-03",
+  //     address: "222 Birch Street, Countryside",
+  //     financialGoals: "Capital preservation",
+  //     notes: "Retiree, very risk averse.",
+  //     investmentPreferences: ["Income Generation"],
+  //     sourceOfLead: "Walk-in",
+  //     lifetimeRevenue: 4000, // Added lifetime revenue
+  //   },
+  //   // Adding a new client for testing the 'new_client_onboarding' opportunity
+  //   {
+  //     id: "client-6",
+  //     name: "New Client Test",
+  //     email: "new.client@email.com",
+  //     phone: "+60 12-111 2222",
+  //     portfolioValue: 5000, // Low portfolio value
+  //     monthlyReturn: 0,
+  //     lastContact: "Today",
+  //     nextReview: "2024-04-01",
+  //     status: "active",
+  //     riskProfile: "Moderate",
+  //     joinDate: new Date().toISOString().split("T")[0], // Today's date
+  //     totalGainLoss: 0,
+  //     totalGainLossPercent: 0,
+  //     dateOfBirth: "1995-01-01",
+  //     address: "100 New St, New City",
+  //     financialGoals: "General savings",
+  //     notes: "Brand new client, needs initial setup.",
+  //     investmentPreferences: [],
+  //     sourceOfLead: "Online ad",
+  //     lifetimeRevenue: 0, // New client, so 0 lifetime revenue
+  //   },
+  // ]);
 
+  // Pass the clients array (from this component's state) and the openAddClientModal handler to ClientsList
+  const { loadingClients, errorClients, clients } = useClients();
+  console.log("CLIENTTTS", clients);
   // Mock planner data - these now reflect the dynamic 'clients' state
   const plannerData = {
     name: "Sarah Chen",
@@ -286,9 +291,10 @@ export default function PlannerCRMApp() {
     }, 750);
   };
 
+  // TODO: connect to db to add client
   // Handler for adding a new client from the modal
   const handleAddNewClient = (newClient: Client) => {
-    setClients((prevClients) => [...prevClients, newClient]);
+    // setClients((prevClients) => [...prevClients, newClient]);
     setShowAddClientModal(false); // Close the modal after adding
     // Optionally, you could immediately navigate to the new client's view:
     // handleClientSelection(newClient.id);
@@ -754,7 +760,15 @@ export default function PlannerCRMApp() {
           />
         );
       case "clients":
-        // Pass the clients array (from this component's state) and the openAddClientModal handler to ClientsList
+        if (loadingClients)
+          return (
+            <div className="p-6 text-sm text-muted-foreground">
+              Loading clients…
+            </div>
+          );
+        if (errorClients)
+          return <div className="p-6 text-sm text-red-600">Error: {error}</div>;
+
         return (
           <ClientsList
             clients={clients}
